@@ -1,0 +1,10 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title}
+
+  p The inventory currently has the following record counts:
+  ul
+    li #[strong Games:] !{game_count}
+    li #[strong Categories] !{category_count}
