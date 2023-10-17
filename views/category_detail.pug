@@ -1,0 +1,20 @@
+extends layout
+
+block content
+  h1= title
+
+  h4 Description
+  p #{category.description}
+
+  h4 Games
+  ul
+    each game in categoryGames
+      li
+        a(href=game.url) #{game.title}
+
+  hr 
+  p 
+    a(href=category.url + '/delete') Delete Category
+
+  p 
+    a(href=category.url + '/update') Update Category
