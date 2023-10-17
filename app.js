@@ -9,6 +9,7 @@ const RateLimit = require('express-rate-limit');
 const mongoose = require('mongoose');
 const { cachedDataVersionTag } = require('v8');
 const indexRouter = require('./routes/index');
+const catalogRouter = require('./routes/catalog');
 
 const app = express();
 const limiter = RateLimit({
@@ -41,6 +42,7 @@ app.use(
 );
 
 app.use('/', indexRouter);
+app.use('/catalog', catalogRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

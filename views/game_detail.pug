@@ -1,0 +1,27 @@
+extends layout
+
+block content
+  h1= title
+
+
+  
+  h4 #[strong Description]
+  p #{game.description}
+  
+  p #[strong Price:] $!{game.price}
+
+  p #[strong Stock:] !{game.stock}
+
+  p #[strong Serial-Number:] #{ game.sn }
+  p #[strong Category:]
+  each val, index in game.category
+    a(href=val.url) #{val.name}
+    if index < game.category.length - 1
+      |, 
+
+
+  hr
+  p 
+    a(href=game.url + '/delete') Delete Game
+  p 
+    a(href=game.url + '/update') Update Game

@@ -1,0 +1,9 @@
+extends layout
+
+block content
+  h1= title
+
+
+  p.lead Are you sure you want to delete #{game.title}?
+  form(method="POST" action='')
+    button.btn.btn-primary(type="submit") Delete

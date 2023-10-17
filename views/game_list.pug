@@ -1,0 +1,11 @@
+extends layout
+
+
+block content
+  h1= title
+
+  dl
+    each game in games
+      dt
+        a(href=game.url) #{game.title}
+      dd #{game.description}
