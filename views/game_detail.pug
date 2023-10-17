@@ -3,8 +3,8 @@ extends layout
 block content
   h1= title
 
-
-  
+  if game.image.data
+    img(style='margin-bottom:1rem;' width='260' src="data:image/" + game.image.contentType + ';base64,' + (game.image.data.toString('base64'))) 
   h4 #[strong Description]
   p #{game.description}
   

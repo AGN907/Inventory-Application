@@ -2,7 +2,7 @@ extends layout
 
 block content
   h1= title
-  form(method="POST" action='')
+  form(method="POST" action='' enctype="multipart/form-data")
     div.form-group
       label.form-label(for='title') Title
       input#title.form-control(placeholder="Game title" name="title" required='true' value=(undefiend===game ? '' : game.title ))
@@ -22,6 +22,10 @@ block content
           div(style='display: inline; padding-right:10px;')
             input.checkbox-input(type='checkbox' name='category'  id=category._id value=category._id checked=category.checked) 
             lable(for=category._id) #{category.name} 
+      div.form-group(style='margin-top:1rem;')
+        label(for='image' style='cursor:pointer;display:flex;flex-direction:column; width:100px; align-items:center; font-size:1rem;') Upload Image 
+        input#image(type='file' name='image')
+
     button.btn.btn-primary(type='submit') Submit
 
   if errors

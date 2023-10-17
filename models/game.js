@@ -11,6 +11,7 @@ const GameSchema = new Schema({
   price: { type: Number, required: true },
   stock: { type: Number, required: true },
   sn: { type: Schema.Types.UUID, default: () => randomUUID() },
+  image: { data: Buffer, contentType: String },
 });
 
 GameSchema.virtual('url').get(function () {

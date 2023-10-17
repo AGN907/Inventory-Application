@@ -1,6 +1,10 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-param-reassign */
 const asyncHandler = require('express-async-handler');
+const multer = require('multer');
+
+const upload = multer({ dest: 'uploads' });
+const fs = require('fs');
 const { body, validationResult } = require('express-validator');
 const Game = require('../models/game');
 const Category = require('../models/category');
@@ -33,7 +37,6 @@ exports.game_list = asyncHandler(async (req, res) => {
 exports.game_detail = asyncHandler(async (req, res) => {
   const game = await Game.findById(req.params.id).populate('category').exec();
 
-  console.log(game);
   res.render('game_detail', {
     title: game.title,
     game,
@@ -49,12 +52,14 @@ exports.game_create_get = asyncHandler(async (req, res) => {
 });
 
 exports.game_create_post = [
+
   (req, res, next) => {
     if (!(req.body.category instanceof Array)) {
       if (typeof req.body.category === 'undefined') { req.body.genre = []; } else req.body.category = new Array(req.body.category);
     }
     next();
   },
+
   body('title', 'Title must contain at least 3 characters')
     .trim()
     .isLength({ min: 3 })
@@ -74,9 +79,9 @@ exports.game_create_post = [
     .escape(),
   body('category.*').escape(),
 
+  upload.single('image'),
   asyncHandler(async (req, res) => {
-    const errors = validationResult(req);
-    console.log('sent');
+    const errors = validationResult(req.body);
 
     const game = new Game({
       title: req.body.title,
@@ -85,7 +90,10 @@ exports.game_create_post = [
       stock: req.body.stock,
       category: req.body.category,
     });
-
+    if (req.file) {
+      game.image.data = fs.readFileSync(req.file.path);
+      game.image.contentType = req.file.mimetype;
+    }
     if (!errors.isEmpty()) {
       const allCategories = await Category.find({}, 'name').sort({ name: 1 }).exec();
 
@@ -181,8 +189,10 @@ exports.game_update_post = [
     .escape(),
   body('category.*').escape(),
 
+  upload.single('image'),
+
   asyncHandler(async (req, res) => {
-    const errors = validationResult(req);
+    const errors = validationResult(req.body);
     const game = new Game({
       title: req.body.title,
       description: req.body.description,
@@ -191,6 +201,10 @@ exports.game_update_post = [
       category: typeof req.body.category === 'undefined' ? [] : req.body.category,
       _id: req.params.id,
     });
+    if (req.file) {
+      game.image.data = fs.readFileSync(req.file.path);
+      game.image.contentType = req.file.mimetype;
+    }
 
     if (!errors.isEmpty()) {
       const allCategories = await Category.find({}, 'name').sort({ name: 1 }).exec();
